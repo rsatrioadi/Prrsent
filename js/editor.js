@@ -62,12 +62,27 @@ window.App = window.App || {};
     t.setSelectionRange(pos, pos);
   }
 
+  // Wrap the current selection (or a placeholder) with `before`/`after`, leaving
+  // the inner text selected so the user can type over it.
+  function wrapSelection(before, after, placeholder) {
+    var t = el();
+    var s = t.selectionStart || 0;
+    var e = t.selectionEnd || 0;
+    var sel = t.value.slice(s, e) || (placeholder || "");
+    var replacement = before + sel + after;
+    t.value = t.value.slice(0, s) + replacement + t.value.slice(e);
+    var innerStart = s + before.length;
+    t.focus();
+    t.setSelectionRange(innerStart, innerStart + sel.length);
+  }
+
   App.Editor = {
     el: el,
     getValue: getValue,
     setValue: setValue,
     getCursorLine: getCursorLine,
     setCursorToLine: setCursorToLine,
-    insertAtCursor: insertAtCursor
+    insertAtCursor: insertAtCursor,
+    wrapSelection: wrapSelection
   };
 })();

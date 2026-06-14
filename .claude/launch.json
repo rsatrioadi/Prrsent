@@ -4,7 +4,7 @@
     {
       "name": "prrsent",
       "runtimeExecutable": "python3",
-      "runtimeArgs": ["-m", "http.server", "8777"],
+      "runtimeArgs": ["serve.py", "8777"],
       "port": 8777
     }
   ]

@@ -106,6 +106,20 @@ html, body {
   border-bottom: 1px solid var(--panel-border);
 }
 
+.tb-btn {
+  background: #333;
+  color: #ddd;
+  border: 1px solid #444;
+  border-radius: 4px;
+  padding: 4px 9px;
+  font-size: 12px;
+  cursor: pointer;
+  line-height: 1.2;
+}
+
+.tb-btn:hover { background: #3d3d3d; }
+.tb-btn:active { background: #2a2a2a; }
+
 #editor {
   flex: 1 1 auto;
   width: 100%;
