@@ -299,3 +299,66 @@ html, body {
 }
 
 #nav-full { margin-left: auto; }
+
+/* ---- Slideshow overlay ---- */
+#show {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  background: #000;
+  align-items: center;
+  justify-content: center;
+}
+
+#show.active { display: flex; }
+
+#show-frame-wrap {
+  position: relative;
+  background: #fff;
+}
+
+#show-frame-wrap iframe {
+  border: none;
+  display: block;
+  background: #fff;
+}
+
+#show-controls {
+  position: fixed;
+  bottom: 18px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 12px;
+  background: rgba(20, 20, 20, 0.75);
+  border: 1px solid #333;
+  border-radius: 24px;
+  opacity: 0;
+  transition: opacity 0.25s;
+}
+
+#show:hover #show-controls { opacity: 1; }
+
+#show-controls button {
+  background: transparent;
+  color: #eee;
+  border: none;
+  font-size: 18px;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+#show-controls button:hover { background: rgba(255, 255, 255, 0.15); }
+
+#show-counter {
+  color: #ccc;
+  font-size: 13px;
+  min-width: 56px;
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+}

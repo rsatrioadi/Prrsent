@@ -116,10 +116,11 @@ window.App = window.App || {};
       ta.addEventListener(ev, function () { engaged = true; });
     });
 
-    // Content changes: re-parse and follow the caret.
+    // Content changes: re-parse, follow the caret, and autosave.
     ta.addEventListener("input", function () {
       engaged = true;
       refresh(true);
+      scheduleSave();
     });
 
     // Caret moves without content change: just update the active slide.
@@ -141,7 +142,8 @@ window.App = window.App || {};
     var map = {
       "nav-home": function () { goToSlide(0, true); },
       "nav-prev": function () { goToSlide(state.activeIndex - 1, true); },
-      "nav-next": function () { goToSlide(state.activeIndex + 1, true); }
+      "nav-next": function () { goToSlide(state.activeIndex + 1, true); },
+      "nav-full": function () { if (App.Show) App.Show.enter(); }
     };
     Object.keys(map).forEach(function (id) {
       var b = document.getElementById(id);
@@ -149,15 +151,48 @@ window.App = window.App || {};
     });
   }
 
+  // ---- Autosave ----
+  var saveTimer = null;
+  function scheduleSave() {
+    if (!App.Storage || !App.Storage.available) return;
+    clearTimeout(saveTimer);
+    saveTimer = setTimeout(function () {
+      App.Storage.kvSet("markdown", App.Editor.getValue());
+      App.Storage.kvSet("themeCSS", App.Theme.get());
+    }, 400);
+  }
+
+  // Restore persisted project before seeding the sample deck.
+  function restore() {
+    if (!App.Storage || !App.Storage.available) return Promise.resolve();
+    return Promise.all([
+      App.Storage.kvGet("markdown"),
+      App.Storage.kvGet("themeCSS")
+    ]).then(function (r) {
+      var md = r[0], css = r[1];
+      if (typeof md === "string" && md.length) App.Editor.el().value = md;
+      if (typeof css === "string" && css.length) {
+        var t = document.getElementById("theme-editor");
+        if (t) { t.value = css; App.Theme.apply(); }
+      }
+    }).catch(function () {});
+  }
+
   function init() {
     initTabs();
     if (App.Toolbar && App.Toolbar.build) App.Toolbar.build();
     if (App.Assets && App.Assets.init) App.Assets.init();
     if (App.Theme && App.Theme.init) App.Theme.init();
-    initEditor();
+    if (App.Show && App.Show.init) App.Show.init();
     initNav();
-    state.activeIndex = 0; // always open on the first slide
-    refresh(false);
+
+    App.onThemeChange = scheduleSave; // theme edits trigger autosave
+
+    restore().then(function () {
+      initEditor();
+      state.activeIndex = 0; // always open on the first slide
+      refresh(false);
+    });
   }
 
   if (document.readyState === "loading") {

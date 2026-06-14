@@ -70,12 +70,18 @@ window.App = window.App || {};
     }) + "</pre>";
   }
 
-  // Render a slide object ({ markdown }) into the iframe.
-  function render(slide) {
-    ensureFrame();
+  // Full HTML document for a slide (markdown -> html -> asset resolve -> doc).
+  // Shared by the live preview and the slideshow.
+  function slideHTML(slide) {
     var html = renderMarkdown(slide ? slide.markdown : "");
     if (App.Assets && App.Assets.resolve) html = App.Assets.resolve(html);
-    frame.srcdoc = buildDoc(html);
+    return buildDoc(html);
+  }
+
+  // Render a slide object ({ markdown }) into the preview iframe.
+  function render(slide) {
+    ensureFrame();
+    frame.srcdoc = slideHTML(slide);
     fit();
   }
 
@@ -97,6 +103,7 @@ window.App = window.App || {};
   App.Preview = {
     themeCSS: "",
     render: render,
+    slideHTML: slideHTML,
     fit: fit,
     LOGICAL_W: LOGICAL_W,
     LOGICAL_H: LOGICAL_H
