@@ -97,6 +97,48 @@ window.App = window.App || {};
     });
   }
 
+  function lookup(name) {
+    var decoded;
+    try { decoded = decodeURIComponent(name); } catch (e) { decoded = name; }
+    return items[decoded] || items[name] || null;
+  }
+
+  function blobToDataURL(blob) {
+    return new Promise(function (resolve) {
+      var r = new FileReader();
+      r.onload = function () { resolve(r.result); };
+      r.onerror = function () { resolve(null); };
+      r.readAsDataURL(blob);
+    });
+  }
+
+  // Like resolve(), but inlines assets as self-contained data: URLs. Used for
+  // PDF export so the print document needs no external/blob references.
+  function resolveDataURLs(html) {
+    if (!html) return Promise.resolve(html);
+    var names = [];
+    html.replace(/asset:([^\s"')>]+)/g, function (whole, name) {
+      if (names.indexOf(name) < 0) names.push(name);
+      return whole;
+    });
+    var map = {};
+    var chain = Promise.resolve();
+    names.forEach(function (name) {
+      var it = lookup(name);
+      if (!it) return;
+      chain = chain.then(function () {
+        return blobToDataURL(it.record.blob).then(function (data) {
+          if (data) map[name] = data;
+        });
+      });
+    });
+    return chain.then(function () {
+      return html.replace(/asset:([^\s"')>]+)/g, function (whole, name) {
+        return map[name] || whole;
+      });
+    });
+  }
+
   // ---- UI ----
   function render() {
     var list = document.getElementById("asset-list");
@@ -189,6 +231,7 @@ window.App = window.App || {};
   App.Assets = {
     init: init,
     resolve: resolve,
+    resolveDataURLs: resolveDataURLs,
     addFiles: addFiles,
     remove: remove
   };

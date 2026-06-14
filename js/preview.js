@@ -111,7 +111,9 @@ window.App = window.App || {};
     themeCSS: "",
     render: render,
     slideHTML: slideHTML,
+    renderMarkdown: renderMarkdown,
     fit: fit,
+    BASE_CSS: BASE_CSS,
     LOGICAL_W: LOGICAL_W,
     LOGICAL_H: LOGICAL_H
   };

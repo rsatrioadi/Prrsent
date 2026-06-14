@@ -298,7 +298,7 @@ html, body {
   font-variant-numeric: tabular-nums;
 }
 
-#nav-full { margin-left: auto; }
+#nav-pdf { margin-left: auto; }
 
 /* ---- Slideshow overlay ---- */
 #show {
