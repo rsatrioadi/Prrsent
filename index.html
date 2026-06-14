@@ -23,7 +23,13 @@
         </div>
 
         <div class="tab-panel" data-panel="assets">
-          <p class="placeholder">Assets (images, audio, video) — coming soon.</p>
+          <div id="assets-toolbar">
+            <label class="tb-btn" for="asset-upload">＋ Upload</label>
+            <input id="asset-upload" type="file" multiple
+                   accept="image/*,audio/*,video/*" hidden>
+            <span class="assets-hint">Reference with <code>asset:filename</code></span>
+          </div>
+          <div id="asset-list"></div>
         </div>
 
         <div class="tab-panel" data-panel="theme">

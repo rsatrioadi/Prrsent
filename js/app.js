@@ -152,6 +152,7 @@ window.App = window.App || {};
   function init() {
     initTabs();
     if (App.Toolbar && App.Toolbar.build) App.Toolbar.build();
+    if (App.Assets && App.Assets.init) App.Assets.init();
     initEditor();
     initNav();
     state.activeIndex = 0; // always open on the first slide

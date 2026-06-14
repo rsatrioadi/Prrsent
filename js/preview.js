@@ -74,6 +74,7 @@ window.App = window.App || {};
   function render(slide) {
     ensureFrame();
     var html = renderMarkdown(slide ? slide.markdown : "");
+    if (App.Assets && App.Assets.resolve) html = App.Assets.resolve(html);
     frame.srcdoc = buildDoc(html);
     fit();
   }
