@@ -19,17 +19,24 @@ window.App = window.App || {};
     "background:#fff;color:#1a1a1a}",
     ".slide{width:" + LOGICAL_W + "px;height:" + LOGICAL_H + "px;padding:64px 72px;",
     "overflow:hidden;display:flex;flex-direction:column;justify-content:flex-start;",
-    "align-items:flex-start}",
+    "align-items:flex-start;",
+    /* Base font size on the slide so ALL descendants (pre, button, code, etc.)
+       inherit a consistent starting point instead of the browser's 16px default. */
+    "font-size:28px;line-height:1.45}",
     ".slide>:first-child{margin-top:0}",
     "h1{font-size:60px;line-height:1.1;margin:0 0 24px}",
     "h2{font-size:44px;line-height:1.15;margin:0 0 20px}",
     "h3{font-size:34px;margin:0 0 16px}",
-    "p,li{font-size:28px;line-height:1.45}",
+    "p,li{font-size:1em}",   // now relative — inherits 28px from .slide
     "ul,ol{margin:0 0 16px;padding-left:1.2em}",
-    "code{font-family:'SF Mono',Menlo,Consolas,monospace;font-size:0.9em;",
+    /* Browsers don't let button/input/select/textarea inherit font by default. */
+    "button,input,select,textarea{font-family:inherit;font-size:inherit;line-height:inherit}",
+    "code{font-family:'SF Mono',Menlo,Consolas,monospace;font-size:0.85em;",
     "background:#f0f0f0;padding:2px 6px;border-radius:4px}",
-    "pre{background:#f5f5f5;padding:20px;border-radius:8px;overflow:auto}",
-    "pre code{background:none;padding:0}",
+    "pre{background:#f5f5f5;padding:20px;border-radius:8px;overflow:auto;",
+    /* pre normally resets to a small monospace via UA stylesheet; force inherit */
+    "font-size:inherit}",
+    "pre code{background:none;padding:0;font-size:0.85em}",
     "img,video{max-width:100%;max-height:100%}",
     "a{color:#0e639c}",
     "blockquote{border-left:4px solid #ddd;margin:0 0 16px;padding-left:20px;color:#555}"
