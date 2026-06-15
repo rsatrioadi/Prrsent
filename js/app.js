@@ -77,6 +77,18 @@ window.App = window.App || {};
     if (b) b.disabled = !!val;
   }
 
+  // Load deck content (markdown + theme) into the editor and re-render.
+  // Used by the project Open/New flow. Does not mark the document dirty.
+  function loadContent(markdown, themeCSS) {
+    App.Editor.setValue(markdown || "");
+    var t = document.getElementById("theme-editor");
+    if (t) t.value = themeCSS != null ? themeCSS : App.Theme.DEFAULT;
+    if (App.Theme && App.Theme.apply) App.Theme.apply();
+    state.activeIndex = 0;
+    refresh(false);
+    App.Editor.el().setSelectionRange(0, 0);
+  }
+
   // Set the active slide and move the editor caret to its first line.
   function goToSlide(index, moveCursor) {
     if (!state.parsed) return;
@@ -121,6 +133,7 @@ window.App = window.App || {};
       engaged = true;
       refresh(true);
       scheduleSave();
+      if (App.Project) App.Project.markDirty();
     });
 
     // Caret moves without content change: just update the active slide.
@@ -187,12 +200,18 @@ window.App = window.App || {};
     if (App.Show && App.Show.init) App.Show.init();
     initNav();
 
-    App.onThemeChange = scheduleSave; // theme edits trigger autosave
+    App.onThemeChange = function () {
+      scheduleSave();
+      if (App.Project) App.Project.markDirty();
+    };
+
+    if (App.Project && App.Project.init) App.Project.init();
 
     restore().then(function () {
       initEditor();
       state.activeIndex = 0; // always open on the first slide
       refresh(false);
+      if (App.Project && App.Project.markClean) App.Project.markClean();
     });
   }
 
@@ -204,5 +223,6 @@ window.App = window.App || {};
 
   App.refresh = refresh;
   App.goToSlide = goToSlide;
+  App.loadContent = loadContent;
   App.state = state;
 })();

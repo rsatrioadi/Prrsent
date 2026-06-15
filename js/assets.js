@@ -57,6 +57,7 @@ window.App = window.App || {};
     return chain.then(function () {
       render();
       if (App.refresh) App.refresh(false);
+      if (App.Project) App.Project.markDirty();
     });
   }
 
@@ -68,6 +69,7 @@ window.App = window.App || {};
     return p.then(function () {
       render();
       if (App.refresh) App.refresh(false);
+      if (App.Project) App.Project.markDirty();
     });
   }
 
@@ -136,6 +138,58 @@ window.App = window.App || {};
       return html.replace(/asset:([^\s"')>]+)/g, function (whole, name) {
         return map[name] || whole;
       });
+    });
+  }
+
+  // ---- project import/export ----
+  // Serializable form: [{ name, type, data: "data:...base64" }]
+  function exportSerializable() {
+    var names = Object.keys(items);
+    var out = [];
+    var chain = Promise.resolve();
+    names.forEach(function (name) {
+      var it = items[name];
+      chain = chain.then(function () {
+        return blobToDataURL(it.record.blob).then(function (data) {
+          out.push({ name: name, type: it.record.type, data: data });
+        });
+      });
+    });
+    return chain.then(function () { return out; });
+  }
+
+  function clearAll() {
+    Object.keys(items).forEach(function (n) {
+      if (items[n].url) URL.revokeObjectURL(items[n].url);
+    });
+    items = {};
+    var p = App.Storage.available ? App.Storage.assetClear() : Promise.resolve();
+    return p.then(function () { render(); });
+  }
+
+  // Replace all assets with the given serializable array.
+  function importSerializable(arr) {
+    return clearAll().then(function () {
+      var chain = Promise.resolve();
+      (arr || []).forEach(function (a) {
+        chain = chain.then(function () {
+          return fetch(a.data).then(function (r) { return r.blob(); }).then(function (blob) {
+            var record = {
+              name: a.name,
+              type: a.type || blob.type || "application/octet-stream",
+              size: blob.size,
+              blob: blob,
+              addedAt: Date.now()
+            };
+            addRecord(record);
+            return App.Storage.available ? App.Storage.assetPut(record) : null;
+          });
+        });
+      });
+      return chain;
+    }).then(function () {
+      render();
+      if (App.refresh) App.refresh(false);
     });
   }
 
@@ -233,6 +287,9 @@ window.App = window.App || {};
     resolve: resolve,
     resolveDataURLs: resolveDataURLs,
     addFiles: addFiles,
-    remove: remove
+    remove: remove,
+    exportSerializable: exportSerializable,
+    importSerializable: importSerializable,
+    clearAll: clearAll
   };
 })();

@@ -64,6 +64,9 @@ window.App = window.App || {};
   function assetDelete(name) {
     return tx("assets", "readwrite").then(function (s) { return wrap(s.delete(name)); });
   }
+  function assetClear() {
+    return tx("assets", "readwrite").then(function (s) { return wrap(s.clear()); });
+  }
 
   App.Storage = {
     open: open,
@@ -72,6 +75,7 @@ window.App = window.App || {};
     assetPut: assetPut,
     assetGetAll: assetGetAll,
     assetDelete: assetDelete,
+    assetClear: assetClear,
     available: !!window.indexedDB
   };
 })();

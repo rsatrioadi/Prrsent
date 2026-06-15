@@ -7,6 +7,23 @@
   <link rel="stylesheet" href="css/app.css">
 </head>
 <body>
+  <!-- Menu bar (single-document interface) -->
+  <div id="menu-bar">
+    <span class="brand">Prrsent</span>
+    <div class="menu">
+      <button id="menu-file" class="menu-btn">File</button>
+      <div id="menu-file-dropdown" class="menu-dropdown">
+        <button id="mi-new">New</button>
+        <button id="mi-open">Open…<span class="kbd">⌘O</span></button>
+        <div class="menu-sep"></div>
+        <button id="mi-save">Save<span class="kbd">⌘S</span></button>
+        <button id="mi-saveas">Save As…<span class="kbd">⇧⌘S</span></button>
+      </div>
+    </div>
+    <span id="doc-name" class="doc-name">Untitled</span>
+    <input id="project-open-input" type="file" accept=".prrsent,application/json" hidden>
+  </div>
+
   <div id="app">
     <!-- Left: editing panel with 3 tabs -->
     <section id="left-panel" class="panel">
@@ -83,6 +100,7 @@
   <script src="js/theme.js"></script>
   <script src="js/show.js"></script>
   <script src="js/export.js"></script>
+  <script src="js/project.js"></script>
   <script src="js/app.js"></script>
 </body>
 </html>
