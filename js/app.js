@@ -158,6 +158,7 @@ window.App = window.App || {};
       "nav-prev": function () { goToSlide(state.activeIndex - 1, true); },
       "nav-next": function () { goToSlide(state.activeIndex + 1, true); },
       "nav-pdf": function () { if (App.Export) App.Export.run(); },
+      "nav-pptx": function () { if (App.Pptx) App.Pptx.run(); },
       "nav-full": function () { if (App.Show) App.Show.enter(); }
     };
     Object.keys(map).forEach(function (id) {
