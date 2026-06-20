@@ -179,7 +179,9 @@ window.App = window.App || {};
     if (btn && menu) {
       btn.addEventListener("click", function (e) {
         e.stopPropagation();
-        menu.classList.toggle("open");
+        var willOpen = !menu.classList.contains("open");
+        if (App.closeAllMenus) App.closeAllMenus(); else closeMenu();
+        if (willOpen) menu.classList.add("open");
       });
       menu.addEventListener("click", function (e) { e.stopPropagation(); });
       document.addEventListener("click", closeMenu);

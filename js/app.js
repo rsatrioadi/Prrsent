@@ -87,6 +87,7 @@ window.App = window.App || {};
     state.activeIndex = 0;
     refresh(false);
     App.Editor.el().setSelectionRange(0, 0);
+    if (App.Edit) { App.Edit.reset("editor"); App.Edit.reset("theme"); }
   }
 
   // Set the active slide and move the editor caret to its first line.
@@ -211,6 +212,7 @@ window.App = window.App || {};
       initEditor();
       state.activeIndex = 0; // always open on the first slide
       refresh(false);
+      if (App.Edit && App.Edit.init) App.Edit.init();
       if (App.Project && App.Project.markClean) App.Project.markClean();
     });
   }
@@ -224,5 +226,6 @@ window.App = window.App || {};
   App.refresh = refresh;
   App.goToSlide = goToSlide;
   App.loadContent = loadContent;
+  App.scheduleSave = scheduleSave;
   App.state = state;
 })();

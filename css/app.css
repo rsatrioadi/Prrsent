@@ -97,6 +97,13 @@ body {
 }
 .menu-dropdown button:hover { background: var(--accent); color: #fff; }
 
+.menu-dropdown button:disabled {
+  color: var(--muted);
+  cursor: default;
+}
+.menu-dropdown button:disabled:hover { background: transparent; color: var(--muted); }
+.menu-dropdown button:disabled:hover .kbd { color: var(--muted); }
+
 .menu-dropdown .kbd {
   color: var(--muted);
   font-size: 11px;

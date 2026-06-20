@@ -60,6 +60,7 @@ window.App = window.App || {};
     var pos = caretOffset == null ? s + text.length : s + caretOffset;
     t.focus();
     t.setSelectionRange(pos, pos);
+    if (App.Edit) App.Edit.record("editor");
   }
 
   // Wrap the current selection (or a placeholder) with `before`/`after`, leaving
@@ -74,6 +75,7 @@ window.App = window.App || {};
     var innerStart = s + before.length;
     t.focus();
     t.setSelectionRange(innerStart, innerStart + sel.length);
+    if (App.Edit) App.Edit.record("editor");
   }
 
   App.Editor = {

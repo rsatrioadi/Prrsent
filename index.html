@@ -20,6 +20,15 @@
         <button id="mi-saveas">Save As…<span class="kbd">⇧⌘S</span></button>
       </div>
     </div>
+    <div class="menu">
+      <button id="menu-edit" class="menu-btn">Edit</button>
+      <div id="menu-edit-dropdown" class="menu-dropdown">
+        <button id="mi-undo">Undo<span class="kbd">⌘Z</span></button>
+        <button id="mi-redo">Redo<span class="kbd">⇧⌘Z</span></button>
+        <div class="menu-sep"></div>
+        <button id="mi-selectall">Select All<span class="kbd">⌘A</span></button>
+      </div>
+    </div>
     <span id="doc-name" class="doc-name">Untitled</span>
     <input id="project-open-input" type="file" accept=".prrsent,application/json" hidden>
   </div>
@@ -100,7 +109,9 @@
   <script src="js/theme.js"></script>
   <script src="js/show.js"></script>
   <script src="js/export.js"></script>
+  <script src="js/pptx.js"></script>
   <script src="js/project.js"></script>
+  <script src="js/edit.js"></script>
   <script src="js/app.js"></script>
 </body>
 </html>

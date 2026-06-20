@@ -66,6 +66,7 @@ window.App = window.App || {};
   function set(css) {
     if (el()) el().value = css;
     apply();
+    if (App.Edit) App.Edit.record("theme");
   }
 
   function init() {
